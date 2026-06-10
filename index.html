@@ -169,6 +169,31 @@
     line-height: 1.1;
     filter: drop-shadow(0 0 25px rgba(255, 94, 138, 0.55));
   }
+  .te-amo {
+    transition: font-size 0.45s ease;
+  }
+  .te-amo span {
+    display: inline-block;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+  }
+  .te-amo span.cambiando {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  .te-amo.texto-largo { font-size: clamp(2.2rem, 9vw, 6.5rem); }
+
+  .idioma-label {
+    color: var(--rosa-claro);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    min-height: 1.5em;
+    margin-top: 6px;
+    opacity: 0;
+    animation: aparecer 1.5s ease 1.6s forwards;
+    transition: opacity 0.4s ease;
+  }
+
   .hero-nombre {
     font-size: clamp(1.5rem, 5vw, 2.6rem);
     font-style: italic;
@@ -741,8 +766,9 @@
 <!-- HERO -->
 <section id="hero">
   <div class="content">
-    <p class="hero-saludo">Hice esto solo para vos</p>
-    <h1 class="te-amo">TE AMO</h1>
+    <p class="hero-saludo">Hice esto para vos</p>
+    <h1 class="te-amo" id="teAmo"><span id="teAmoTexto">TE AMO</span></h1>
+    <p class="idioma-label" id="idiomaLabel">español ❤️</p>
     <p class="hero-nombre" id="nombreHero"></p>
     <div class="crono">
       <p class="crono-titulo">❤️ Amándote desde que te conocí ❤️</p>
@@ -878,6 +904,46 @@
   document.getElementById('nombreHero').textContent = CONFIG.nombreElla;
   document.getElementById('textoCelebracion').textContent = "Te hiciste el amarre sola " + CONFIG.nombreElla + " para siempre. ❤️∞";
   document.getElementById('textoPremio').textContent = CONFIG.premioRaspa;
+
+  /* ──────────────── TE AMO en muchos idiomas ──────────────── */
+  const teAmo = document.getElementById('teAmo');
+  const teAmoTexto = document.getElementById('teAmoTexto');
+  const idiomaLabel = document.getElementById('idiomaLabel');
+
+  const ESPANOL = { texto: "TE AMO", idioma: "español ❤️" };
+  const IDIOMAS = [
+    { texto: "I LOVE YOU", idioma: "inglés" },
+    { texto: "JE T'AIME", idioma: "francés" },
+    { texto: "TI AMO", idioma: "italiano" },
+    { texto: "EU TE AMO", idioma: "portugués" },
+    { texto: "ICH LIEBE DICH", idioma: "alemán" },
+    { texto: "愛してる", idioma: "japonés · «aishiteru»" },
+    { texto: "사랑해", idioma: "coreano · «saranghae»" },
+    { texto: "我爱你", idioma: "chino · «wo ai ni»" },
+    { texto: "ЛЮБЛЮ ТЕБЯ", idioma: "ruso · «lyublyu tebya»" },
+    { texto: "Σ'ΑΓΑΠΩ", idioma: "griego · «s'agapó»" }
+  ];
+
+  let idiomaIdx = 0;
+  let tocaEspanol = false; // siempre vuelve al español entre idioma e idioma
+
+  function cambiarIdioma() {
+    const item = tocaEspanol ? ESPANOL : IDIOMAS[idiomaIdx++ % IDIOMAS.length];
+    teAmoTexto.classList.add('cambiando');
+    idiomaLabel.style.opacity = 0;
+    setTimeout(() => {
+      teAmoTexto.textContent = item.texto;
+      idiomaLabel.textContent = item.idioma;
+      teAmo.classList.toggle('texto-largo', item.texto.length > 9);
+      teAmoTexto.classList.remove('cambiando');
+      idiomaLabel.style.opacity = '';
+    }, 450);
+    // el español se queda más tiempo en pantalla que los demás
+    const espera = tocaEspanol ? 3400 : 2300;
+    tocaEspanol = !tocaEspanol;
+    setTimeout(cambiarIdioma, espera);
+  }
+  setTimeout(cambiarIdioma, 5000); // arranca cuando terminan las animaciones de entrada
 
   /* ──────────────── Cronómetro en vivo ──────────────── */
   const inicio = new Date(CONFIG.fechaInicio + "T00:00:00");
