@@ -172,13 +172,20 @@
   .te-amo {
     transition: font-size 0.45s ease;
   }
-  .te-amo span {
-    display: inline-block;
-    transition: opacity 0.45s ease, transform 0.45s ease;
+  .te-amo span { display: inline-block; }
+  /* transición estilo iPhone "Hola": sale hacia arriba difuminándose, entra desde abajo */
+  .te-amo span.saliendo {
+    animation: salirIdioma 0.55s cubic-bezier(0.55, 0, 0.85, 0.4) forwards;
   }
-  .te-amo span.cambiando {
-    opacity: 0;
-    transform: translateY(16px) scale(0.95);
+  .te-amo span.entrando {
+    animation: entrarIdioma 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes salirIdioma {
+    to { opacity: 0; transform: translateY(-26px) scale(0.97); filter: blur(10px); }
+  }
+  @keyframes entrarIdioma {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); filter: blur(10px); }
+    to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
   }
   .te-amo.texto-largo { font-size: clamp(2.2rem, 9vw, 6.5rem); }
 
@@ -924,26 +931,26 @@
     { texto: "Σ'ΑΓΑΠΩ", idioma: "griego · «s'agapó»" }
   ];
 
-  let idiomaIdx = 0;
-  let tocaEspanol = false; // siempre vuelve al español entre idioma e idioma
+  // el español rota como uno más dentro de la secuencia
+  const SECUENCIA = [ESPANOL, ...IDIOMAS];
+  let idiomaIdx = 1; // el español inicial ya está en pantalla; arranca con inglés
 
   function cambiarIdioma() {
-    const item = tocaEspanol ? ESPANOL : IDIOMAS[idiomaIdx++ % IDIOMAS.length];
-    teAmoTexto.classList.add('cambiando');
+    const item = SECUENCIA[idiomaIdx++ % SECUENCIA.length];
+    teAmoTexto.classList.remove('entrando');
+    teAmoTexto.classList.add('saliendo');
     idiomaLabel.style.opacity = 0;
     setTimeout(() => {
       teAmoTexto.textContent = item.texto;
       idiomaLabel.textContent = item.idioma;
       teAmo.classList.toggle('texto-largo', item.texto.length > 9);
-      teAmoTexto.classList.remove('cambiando');
+      teAmoTexto.classList.remove('saliendo');
+      teAmoTexto.classList.add('entrando');
       idiomaLabel.style.opacity = '';
-    }, 450);
-    // el español se queda más tiempo en pantalla que los demás
-    const espera = tocaEspanol ? 3400 : 2300;
-    tocaEspanol = !tocaEspanol;
-    setTimeout(cambiarIdioma, espera);
+    }, 540);
+    setTimeout(cambiarIdioma, 3000); // tiempo suficiente para leer cada idioma
   }
-  setTimeout(cambiarIdioma, 5000); // arranca cuando terminan las animaciones de entrada
+  setTimeout(cambiarIdioma, 7500); // solo la primera vez: el español se queda más
 
   /* ──────────────── Cronómetro en vivo ──────────────── */
   const inicio = new Date(CONFIG.fechaInicio + "T00:00:00");
