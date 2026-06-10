@@ -154,7 +154,7 @@
     text-transform: uppercase;
     margin-bottom: 10px;
     opacity: 0;
-    animation: aparecer 1.5s ease 0.5s forwards;
+    animation: aparecer 1.0s ease 0.5s forwards;
   }
   .te-amo {
     font-size: clamp(4rem, 14vw, 10rem);
@@ -162,10 +162,8 @@
     animation: aparecer 1.5s ease 1s forwards;
     opacity: 0;
     line-height: 1.1;
+    white-space: nowrap;  /* nunca partir en dos líneas; texto-largo ajusta el tamaño */
     filter: drop-shadow(0 0 25px rgba(255, 94, 138, 0.55));
-  }
-  .te-amo {
-    transition: font-size 0.45s ease;
   }
   /* el degradado vive en el span: si estuviera en el h1, el blur del span
      rompe el background-clip y el texto queda invisible */
@@ -956,7 +954,7 @@
     }, 540);
     setTimeout(cambiarIdioma, 3000); // tiempo suficiente para leer cada idioma
   }
-  setTimeout(cambiarIdioma, 7500); // solo la primera vez: el español se queda más
+  setTimeout(cambiarIdioma, 4500); // solo la primera vez: el español se queda un poco más
 
   /* ──────────────── Cronómetro en vivo ──────────────── */
   const inicio = new Date(CONFIG.fechaInicio + "T00:00:00");
