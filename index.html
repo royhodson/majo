@@ -131,6 +131,7 @@
     border-radius: 50%;
     border: 1px solid rgba(255,154,181,0.5);
     background: rgba(43, 10, 61, 0.7);
+    -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     color: var(--rosa-claro);
     font-size: 22px;
@@ -237,6 +238,7 @@
     border-radius: 16px;
     padding: 16px 10px;
     min-width: 92px;
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
   }
   .crono-celda .valor {
@@ -514,6 +516,7 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 154, 181, 0.4);
     overflow: hidden;
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
   #juegoCanvas { width: 100%; height: 100%; touch-action: none; cursor: none; }
@@ -693,6 +696,25 @@
     font-style: italic;
     position: relative;
     z-index: 2;
+  }
+
+  /* ============================================================
+     AJUSTES PARA CELULAR
+  ============================================================ */
+  @media (max-width: 480px) {
+    section { padding: 55px 14px; }
+    .te-amo { font-size: clamp(3rem, 16vw, 4.5rem); }
+    .te-amo.texto-largo { font-size: clamp(1.7rem, 9.5vw, 2.6rem); }
+    .carta { padding: 34px 24px; min-height: 280px; line-height: 1.75; }
+    .crono-grid { gap: 8px; }
+    .crono-celda { min-width: 86px; padding: 12px 8px; flex: 1 1 26%; }
+    .btn { padding: 16px 38px; font-size: 1.15rem; }
+    .botones-pregunta { gap: 18px; }
+    .juego-marco { height: 320px; }
+    .raspa-marco { height: 210px; }
+    .hito { padding-left: 60px; }
+    .hito-icono { width: 42px; height: 42px; font-size: 19px; }
+    #btnMusica { width: 46px; height: 46px; font-size: 19px; }
   }
 </style>
 </head>
@@ -947,7 +969,7 @@
     setTimeout(() => {
       teAmoTexto.textContent = item.texto;
       idiomaLabel.textContent = item.idioma;
-      teAmo.classList.toggle('texto-largo', item.texto.length > 9);
+      teAmo.classList.toggle('texto-largo', item.texto.length > 7);
       teAmoTexto.classList.remove('saliendo');
       teAmoTexto.classList.add('entrando');
       idiomaLabel.style.opacity = '';
