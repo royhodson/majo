@@ -1230,7 +1230,9 @@
   /* ──────────────── Carta máquina de escribir ──────────────── */
   const textoCarta = document.getElementById('textoCarta');
   const firma = document.getElementById('firma');
-  const cartaCompleta = CONFIG.nombreElla + ":\n\n" + CONFIG.carta;
+  // Array.from separa por puntos de código: los emojis (💚) ocupan dos
+  // unidades UTF-16 y partirlos a la mitad los rompe
+  const cartaChars = Array.from(CONFIG.nombreElla + ":\n\n" + CONFIG.carta);
   let cartaIniciada = false;
 
   function escribirCarta() {
@@ -1238,11 +1240,11 @@
     cartaIniciada = true;
     let i = 0;
     const intervalo = setInterval(() => {
-      const ch = cartaCompleta[i];
+      const ch = cartaChars[i];
       if (ch === '\n') textoCarta.appendChild(document.createElement('br'));
       else textoCarta.appendChild(document.createTextNode(ch));
       i++;
-      if (i >= cartaCompleta.length) {
+      if (i >= cartaChars.length) {
         clearInterval(intervalo);
         textoCarta.classList.add('terminado');
         firma.textContent = "— " + CONFIG.nombreTu + " ❤️";
